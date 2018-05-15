@@ -4,20 +4,20 @@
     <property name="src.dir" value="src" />
     <property name="build.dir" value="obj" />
 
-    <target name="clean">
-        <delete dir="${build.dir}"/>
-        <mkdir dir="${build.dir}"/>
-    </target>
+    <!-- Kotlin libraries -->
+    <path id="project.classpath">
+        <pathelement location="${src.dir}" />
+        <file file="${platform}"/>
+        <fileset dir="lib" includes="**/*.jar" />
+    </path>
+
+    <typedef name="kotlinc" classpath="lib/kotlinc/lib/kotlin-ant.jar" classname="org.jetbrains.kotlin.ant.Kotlin2JvmTask"/>
+
+    <target name="clean"><delete dir="${build.dir}"/><mkdir dir="${build.dir}"/></target>
 
     <target name="compile">
-        <echo>Compiling Java source</echo>
-
-        <javac classpath="src"
-            bootclasspath="${platform}"
-            source="1.7"
-            target="1.7"
-            srcdir="${src.dir}"
-            destdir="${build.dir}" />
+        <echo>Compiling Kotlin source</echo>
+        <kotlinc output="${build.dir}" src="src" classpath="src" classpathref="project.classpath" />
     </target>
 
 </project>
